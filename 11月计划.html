@@ -1,0 +1,1183 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>十一月量化打卡 · 论文与备考进度台</title>
+<style>
+:root{
+  --paper:#F6F1E6;
+  --paper-2:#FDFBF5;
+  --paper-3:#F1E9D9;
+  --line:#E4DAC6;
+  --line-2:#D7CBB2;
+  --ink:#2B2B33;
+  --ink-2:#6B6B76;
+  --ink-3:#A9A398;
+  --yanzhi:#9D2933;
+  --yanzhi-deep:#8C1F28;
+  --dianqing:#1685A9;
+  --zhuqing:#6E8B52;
+  --xiangse:#D9A93B;
+  --zheshi:#845A33;
+}
+*{box-sizing:border-box;margin:0;padding:0;}
+html,body{height:100%;}
+body{
+  font-family:"PingFang SC","Hiragino Sans GB","Microsoft YaHei",system-ui,sans-serif;
+  background-color:var(--paper);
+  background-image:
+    radial-gradient(circle at 10% 6%, rgba(217,169,59,.07), transparent 40%),
+    radial-gradient(circle at 92% 94%, rgba(22,133,169,.06), transparent 42%),
+    radial-gradient(circle at 50% 50%, rgba(157,41,51,.025), transparent 60%);
+  background-attachment:fixed;
+  color:var(--ink);
+  -webkit-font-smoothing:antialiased;
+  overflow:hidden;
+}
+
+.app{
+  height:100vh;
+  display:flex;
+  flex-direction:column;
+  gap:14px;
+  padding:16px 20px 14px;
+  max-width:1700px;
+  margin:0 auto;
+}
+
+/* ================= 顶栏 ================= */
+.topbar{
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  gap:20px;
+  padding-bottom:14px;
+  border-bottom:2px solid var(--line-2);
+  flex-wrap:wrap;
+}
+.brand{display:flex;align-items:center;gap:13px;flex:none;}
+.seal{
+  width:44px;height:44px;border-radius:9px;
+  background:linear-gradient(145deg,#B0333D,#8C1F28);
+  color:#FDFBF5;
+  font-family:"Kaiti SC","STKaiti","KaiTi",serif;
+  font-size:23px;
+  display:flex;align-items:center;justify-content:center;
+  box-shadow:0 3px 10px rgba(157,41,51,.3);
+  flex:none;
+}
+.brand h1{
+  font-family:"Kaiti SC","STKaiti","KaiTi",serif;
+  font-size:22px;letter-spacing:2px;font-weight:600;line-height:1.2;
+}
+.brand p{font-size:11.5px;color:var(--ink-2);letter-spacing:1.2px;margin-top:2px;}
+
+.top-stats{display:flex;gap:10px;flex-wrap:wrap;align-items:stretch;}
+.mini{
+  min-width:118px;
+  background:var(--paper-2);
+  border:1px solid var(--line);
+  border-radius:10px;
+  padding:7px 12px 8px;
+  display:flex;flex-direction:column;gap:5px;
+}
+.mini .mini-top{
+  display:flex;align-items:baseline;justify-content:space-between;gap:8px;
+}
+.mini .mini-top span{font-size:11px;color:var(--ink-2);letter-spacing:.8px;white-space:nowrap;}
+.mini .mini-top b{
+  font-size:17px;
+  font-family:"Kaiti SC","STKaiti","KaiTi",serif;
+  line-height:1;
+}
+.mini.paper b{color:var(--yanzhi);}
+.mini.fdy b{color:var(--dianqing);}
+.mini.syb b{color:var(--zhuqing);}
+.mini .bar{height:4px;border-radius:3px;background:#EDE5D4;overflow:hidden;}
+.mini .bar i{display:block;height:100%;width:0;border-radius:3px;transition:width .45s ease;}
+.mini.paper .bar i{background:var(--yanzhi);}
+.mini.fdy .bar i{background:var(--dianqing);}
+.mini.syb .bar i{background:var(--zhuqing);}
+
+/* ================= 三栏布局 ================= */
+.layout{
+  flex:1;
+  min-height:0;
+  display:grid;
+  grid-template-columns:296px minmax(0,1fr) 380px;
+  gap:14px;
+}
+.panel{
+  background:var(--paper-2);
+  border:1px solid var(--line);
+  border-radius:14px;
+  padding:16px;
+  box-shadow:0 1px 2px rgba(43,43,51,.04), 0 12px 30px -26px rgba(43,43,51,.5);
+  min-height:0;
+  display:flex;
+  flex-direction:column;
+  overflow:hidden;
+}
+.panel-head{
+  display:flex;
+  align-items:baseline;
+  justify-content:space-between;
+  gap:8px;
+  padding-bottom:9px;
+  margin-bottom:11px;
+  border-bottom:1px dashed var(--line);
+  flex:none;
+}
+.panel-head h2{
+  font-family:"Kaiti SC","STKaiti","KaiTi",serif;
+  font-size:16px;letter-spacing:1.6px;font-weight:600;
+}
+.panel-head span{font-size:11.5px;color:var(--ink-2);white-space:nowrap;}
+
+/* ================= 日历 ================= */
+.cal{display:grid;grid-template-columns:repeat(7,1fr);gap:4px;flex:none;}
+.cal .dow{
+  text-align:center;font-size:11px;color:var(--ink-2);
+  padding:1px 0 5px;
+  font-family:"Kaiti SC","STKaiti","KaiTi",serif;letter-spacing:1px;
+}
+.day{
+  aspect-ratio:1/1.06;
+  border-radius:8px;
+  display:flex;flex-direction:column;
+  align-items:center;justify-content:center;gap:3px;
+  cursor:pointer;
+  border:1px solid transparent;
+  transition:background .15s, box-shadow .15s, color .15s;
+  user-select:none;
+  padding:2px 0;
+}
+.day:hover{background:var(--paper-3);}
+.day.blank{visibility:hidden;cursor:default;pointer-events:none;}
+.day .dnum{font-size:13px;line-height:1;font-variant-numeric:tabular-nums;}
+.day .dbar{
+  width:17px;height:3px;border-radius:2px;background:#EAE1D0;overflow:hidden;
+}
+.day .dbar i{display:block;height:100%;width:0;background:var(--zhuqing);border-radius:2px;transition:width .3s;}
+.day.has .dnum{font-weight:600;}
+.day.all{background:#EDF2E3;}
+.day.all .dnum{color:var(--zhuqing);}
+.day.sel{box-shadow:inset 0 0 0 2px var(--yanzhi);background:#F9EFEF;}
+.day.sel .dnum{color:var(--yanzhi);font-weight:700;}
+.day.sel .dbar i{background:var(--yanzhi);}
+.day.today .dnum::after{
+  content:'';display:inline-block;width:4px;height:4px;border-radius:50%;
+  background:var(--xiangse);margin-left:3px;vertical-align:middle;
+}
+
+.legend{
+  display:flex;flex-wrap:wrap;gap:10px 13px;
+  margin-top:12px;padding-top:11px;
+  border-top:1px dashed var(--line);
+  font-size:11px;color:var(--ink-2);flex:none;
+}
+.legend i{
+  display:inline-block;width:6px;height:6px;border-radius:50%;
+  margin-right:4px;vertical-align:middle;
+}
+
+.cal-summary{
+  margin-top:auto;
+  padding-top:12px;
+  border-top:1px dashed var(--line);
+  display:flex;
+  flex-direction:column;
+  gap:6px;
+  flex:none;
+}
+.cal-summary .row{
+  display:flex;align-items:center;justify-content:space-between;
+  font-size:11.5px;color:var(--ink-2);
+}
+.cal-summary .row b{color:var(--ink);font-size:12.5px;}
+.cal-summary .bar{height:5px;border-radius:3px;background:#EDE5D4;overflow:hidden;margin-top:2px;}
+.cal-summary .bar i{display:block;height:100%;width:0;background:linear-gradient(90deg,var(--xiangse),var(--yanzhi));border-radius:3px;transition:width .45s;}
+
+/* ================= 当日计划 ================= */
+.day-panel{padding-bottom:10px;}
+.day-body{
+  flex:1;min-height:0;overflow-y:auto;
+  margin:0 -6px;padding:0 6px 4px;
+  display:flex;flex-direction:column;gap:13px;
+}
+.day-body::-webkit-scrollbar{width:6px;}
+.day-body::-webkit-scrollbar-thumb{background:#DCD2BC;border-radius:3px;}
+.day-body::-webkit-scrollbar-track{background:transparent;}
+
+.group-head{
+  display:flex;align-items:center;gap:8px;
+  margin-bottom:7px;padding-left:2px;
+}
+.group-head .gtag{
+  font-size:11px;line-height:17px;padding:0 8px;border-radius:20px;
+  border:1px solid;letter-spacing:.6px;flex:none;
+}
+.group-head .gsum{font-size:11px;color:var(--ink-3);margin-left:auto;white-space:nowrap;}
+
+.gtag[data-t="fixed"]{color:#845A33;border-color:#E0CFBB;background:#F7F0E7;}
+.gtag[data-t="paper"]{color:#9D2933;border-color:#E5C6C8;background:#F8EEEE;}
+.gtag[data-t="fdy"]{color:#1685A9;border-color:#BFDDE6;background:#EBF5F8;}
+.gtag[data-t="syb"]{color:#6E8B52;border-color:#D0DDBF;background:#F0F4E9;}
+
+.tasks{list-style:none;display:flex;flex-direction:column;gap:1px;}
+.task{
+  display:flex;align-items:flex-start;gap:9px;
+  padding:7px 7px;border-radius:7px;
+  transition:background .13s;
+  position:relative;
+}
+.task:hover{background:var(--paper-3);}
+.task.done{opacity:.55;}
+.task.done .txt{text-decoration:line-through;color:var(--ink-3);}
+
+.cb{display:flex;align-items:center;flex:none;cursor:pointer;margin-top:2px;}
+.cb input{display:none;}
+.box{
+  width:16px;height:16px;border:1.5px solid #C9BFA8;border-radius:4px;
+  display:block;position:relative;transition:.14s;flex:none;
+}
+.cb:hover .box{border-color:var(--yanzhi);}
+.cb input:checked + .box{background:var(--yanzhi);border-color:var(--yanzhi);}
+.cb input:checked + .box::after{
+  content:'';position:absolute;left:4.6px;top:1px;width:4px;height:8px;
+  border:solid #fff;border-width:0 2px 2px 0;transform:rotate(45deg);
+}
+
+.txt{
+  flex:1;min-width:0;font-size:13.5px;line-height:1.55;
+  word-break:break-word;
+}
+.task .txt{cursor:text;}
+.qty{
+  flex:none;font-size:11px;line-height:17px;padding:0 7px;border-radius:5px;
+  background:#EDE5D4;color:var(--zheshi);white-space:nowrap;margin-top:1px;
+  font-variant-numeric:tabular-nums;cursor:pointer;
+  transition:box-shadow .14s, background .14s;
+}
+.task[data-t="fdy"] .qty{background:#E3F0F4;color:#14718F;}
+.task[data-t="syb"] .qty{background:#EAF1E1;color:#5B7543;}
+.qty:hover{box-shadow:0 0 0 1.5px var(--xiangse);}
+
+.sub-label{
+  display:inline-block;font-size:11.5px;color:var(--ink-2);
+  margin-right:5px;
+}
+.sybd{font-size:11px;color:var(--ink-3);margin-left:4px;}
+
+.del{
+  flex:none;width:20px;height:20px;border:none;background:transparent;
+  color:#CFC5AE;font-size:15px;line-height:1;cursor:pointer;
+  border-radius:4px;opacity:0;transition:.14s;margin-top:1px;
+}
+.task:hover .del{opacity:1;}
+.del:hover{background:#F5E0E0;color:var(--yanzhi);}
+
+.edit-input{
+  flex:1;min-width:100px;font-size:13.5px;font-family:inherit;
+  padding:2px 6px;border:1px solid var(--yanzhi);border-radius:5px;
+  background:#fff;color:var(--ink);outline:none;
+}
+.qty-input{
+  flex:none;width:64px;font-size:12px;font-family:inherit;
+  padding:2px 5px;border:1px solid var(--xiangse);border-radius:5px;
+  background:#fff;color:var(--ink);outline:none;
+  font-variant-numeric:tabular-nums;text-align:right;margin-top:1px;
+}
+
+.empty{
+  padding:24px 8px;text-align:center;color:var(--ink-3);font-size:12.5px;
+}
+
+.day-nav{display:flex;align-items:center;gap:6px;flex:none;}
+.nav-btn{
+  width:26px;height:26px;border-radius:7px;border:1px solid var(--line);
+  background:var(--paper-2);color:var(--ink-2);cursor:pointer;
+  font-size:14px;line-height:1;display:flex;align-items:center;justify-content:center;
+  transition:.14s;
+}
+.nav-btn:hover{border-color:var(--yanzhi);color:var(--yanzhi);}
+
+/* ================= 总目标 ================= */
+.goal-panel{padding-bottom:12px;}
+.goal-body{
+  flex:1;min-height:0;overflow-y:auto;
+  margin:0 -6px;padding:0 6px 4px;
+  display:flex;flex-direction:column;gap:14px;
+}
+.goal-body::-webkit-scrollbar{width:6px;}
+.goal-body::-webkit-scrollbar-thumb{background:#DCD2BC;border-radius:3px;}
+
+.gs-head{
+  display:flex;align-items:center;gap:7px;
+  margin-bottom:9px;
+}
+.gs-head .gname{
+  font-family:"Kaiti SC","STKaiti","KaiTi",serif;
+  font-size:14px;letter-spacing:1.2px;font-weight:600;
+}
+.gs-head .gpct{
+  margin-left:auto;font-size:13px;
+  font-family:"Kaiti SC","STKaiti","KaiTi",serif;font-weight:700;
+}
+.gs-head .gcount{font-size:11px;color:var(--ink-3);}
+
+.gs-item{padding:6px 0 7px;}
+.gs-item + .gs-item{border-top:1px dotted #EAE1D0;}
+.gs-line{
+  display:flex;align-items:baseline;justify-content:space-between;gap:8px;
+  margin-bottom:5px;
+}
+.gs-line .nm{font-size:12px;color:var(--ink);letter-spacing:.3px;}
+.gs-line .vl{
+  font-size:11px;color:var(--ink-2);font-variant-numeric:tabular-nums;
+  white-space:nowrap;
+}
+.gs-line .vl b{color:var(--ink);font-size:11.5px;}
+.gs-bar{height:5px;border-radius:3px;background:#EDE5D4;overflow:hidden;}
+.gs-bar i{display:block;height:100%;width:0;border-radius:3px;transition:width .45s ease;}
+
+.paper .gs-bar i{background:var(--yanzhi);}
+.paper .gs-head .gpct{color:var(--yanzhi);}
+.fdy .gs-bar i{background:var(--dianqing);}
+.fdy .gs-head .gpct{color:var(--dianqing);}
+.syb .gs-bar i{background:var(--zhuqing);}
+.syb .gs-head .gpct{color:var(--zhuqing);}
+
+.gs-note{font-size:10.5px;color:var(--ink-3);margin-top:3px;}
+
+.hint-line{
+  flex:none;
+  font-size:10.5px;
+  color:var(--ink-3);
+  text-align:center;
+  letter-spacing:.3px;
+  padding:6px 0 2px;
+}
+.hint-line b{color:var(--zheshi);font-weight:500;}
+
+.goal-actions{
+  flex:none;padding-top:9px;margin-top:4px;
+  border-top:1px dashed var(--line);
+  display:flex;gap:8px;
+}
+.goal-actions button{
+  flex:1;padding:8px;font-size:11.5px;font-family:inherit;letter-spacing:.8px;
+  border-radius:8px;cursor:pointer;transition:.14s;
+}
+.btn-reset{
+  background:transparent;border:1px dashed var(--line-2);color:var(--ink-2);
+}
+.btn-reset:hover{border-color:var(--yanzhi);color:var(--yanzhi);}
+.btn-all{
+  background:linear-gradient(145deg,#B0333D,#8C1F28);
+  border:1px solid var(--yanzhi-deep);color:#FDFBF5;
+}
+.btn-all:hover{filter:brightness(1.06);}
+
+/* 响应式 */
+@media (max-width:1420px){
+  .layout{grid-template-columns:280px minmax(0,1fr) 340px;}
+}
+@media (max-width:1180px){
+  body{overflow:auto;}
+  .app{height:auto;min-height:100vh;}
+  .layout{grid-template-columns:1fr 1fr;grid-auto-rows:auto;}
+  .panel{max-height:none;}
+  .cal-panel{grid-column:1;grid-row:1;}
+  .goal-panel{grid-column:2;grid-row:1;}
+  .day-panel{grid-column:1 / -1;grid-row:2;}
+  .day-body{overflow:visible;}
+  .goal-body{overflow:visible;}
+}
+@media (max-width:760px){
+  .app{padding:12px 10px 20px;}
+  .layout{grid-template-columns:1fr;}
+  .cal-panel,.goal-panel,.day-panel{grid-column:1;grid-row:auto;}
+  .brand h1{font-size:19px;}
+}
+</style>
+</head>
+<body>
+<div class="app">
+
+  <header class="topbar">
+    <div class="brand">
+      <span class="seal">拾</span>
+      <div>
+        <h1>十一月量化打卡</h1>
+        <p>论文 · 辅导员 1967 题 · 事业编 2265 题</p>
+      </div>
+    </div>
+    <div class="top-stats">
+      <div class="mini paper">
+        <div class="mini-top"><span>论文进度</span><b id="topPaper">0%</b></div>
+        <div class="bar"><i id="topPaperBar"></i></div>
+      </div>
+      <div class="mini fdy">
+        <div class="mini-top"><span>辅导员刷题</span><b id="topFdy">0%</b></div>
+        <div class="bar"><i id="topFdyBar"></i></div>
+      </div>
+      <div class="mini syb">
+        <div class="mini-top"><span>事业编刷题</span><b id="topSyb">0%</b></div>
+        <div class="bar"><i id="topSybBar"></i></div>
+      </div>
+    </div>
+  </header>
+
+  <div class="layout">
+
+    <!-- ========== 左：日历 ========== -->
+    <aside class="panel cal-panel">
+      <div class="panel-head">
+        <h2>2026 · 十一月</h2>
+        <span id="calMeta">—</span>
+      </div>
+      <div class="cal" id="cal"></div>
+      <div class="legend">
+        <span><i style="background:var(--zhuqing)"></i>全部完成</span>
+        <span><i style="background:#D9CBB0"></i>进行中</span>
+        <span><i style="background:var(--yanzhi)"></i>当前选中</span>
+        <span><i style="background:var(--xiangse)"></i>今天</span>
+      </div>
+      <div class="cal-summary">
+        <div class="row"><span>本月任务完成</span><b id="calDone">0 / 0</b></div>
+        <div class="bar"><i id="calBar"></i></div>
+        <div class="row" style="margin-top:4px;"><span>辅导员已刷</span><b id="calFdy">0 题</b></div>
+        <div class="row"><span>事业编已刷</span><b id="calSyb">0 题</b></div>
+      </div>
+    </aside>
+
+    <!-- ========== 中：当日计划 ========== -->
+    <main class="panel day-panel">
+      <div class="panel-head">
+        <h2 id="dayTitle">—</h2>
+        <div class="day-nav">
+          <span id="dayMeta" style="font-size:11.5px;color:var(--ink-2);margin-right:4px;">—</span>
+          <button class="nav-btn" id="prevDay" title="前一天">‹</button>
+          <button class="nav-btn" id="nextDay" title="后一天">›</button>
+        </div>
+      </div>
+      <div class="day-body" id="dayBody"></div>
+    </main>
+
+    <!-- ========== 右：总目标 ========== -->
+    <aside class="panel goal-panel">
+      <div class="panel-head">
+        <h2>总目标进度</h2>
+        <span id="goalMeta">—</span>
+      </div>
+      <div class="goal-body">
+
+        <section class="goal-section paper">
+          <div class="gs-head">
+            <span class="gname">论文 · 七项节点</span>
+            <span class="gcount" id="paperCount">0/0</span>
+            <span class="gpct" id="paperPct">0%</span>
+          </div>
+          <div id="paperItems"></div>
+        </section>
+
+        <section class="goal-section fdy">
+          <div class="gs-head">
+            <span class="gname">辅导员 · 刷题</span>
+            <span class="gcount" id="fdyCount">0/0</span>
+            <span class="gpct" id="fdyPct">0%</span>
+          </div>
+          <div id="fdyItems"></div>
+        </section>
+
+        <section class="goal-section syb">
+          <div class="gs-head">
+            <span class="gname">事业编 · 刷题</span>
+            <span class="gcount" id="sybCount">0/0</span>
+            <span class="gpct" id="sybPct">0%</span>
+          </div>
+          <div id="sybItems"></div>
+        </section>
+
+      </div>
+      <p class="hint-line">双击任务改文字 · 双击题量改<b>数字</b></p>
+      <div class="goal-actions">
+        <button class="btn-reset" id="resetBtn">重置本月</button>
+        <button class="btn-all" id="doneTodayBtn">当日全部完成</button>
+      </div>
+    </aside>
+
+  </div>
+</div>
+
+<script>
+/* ==================== 常量 ==================== */
+const YEAR = 2026, MONTH = 10;
+const STORE_KEY = 'nov-quantified-v2';
+
+const NODES = [
+  '二轮德尔菲问卷',
+  '德尔菲问卷处理',
+  '德尔菲问卷数据计算',
+  '德尔菲法论文段落书写',
+  '框架理论基础书写',
+  '框架维度阐释',
+  '测评卷开发'
+];
+
+const FDY_SUBS = [
+  {name:'高等教育学',      bank:356,  target:356},
+  {name:'高等教育心理学',  bank:964,  target:400},
+  {name:'高等教育法规',    bank:1161, target:350},
+  {name:'高校教师职业道德',bank:787,  target:250},
+  {name:'大学心理学',      bank:161,  target:161},
+  {name:'辅导员知识',      bank:1685, target:300},
+  {name:'党建知识',        bank:1262, target:150}
+];
+
+const SYB_SUBS = [
+  {name:'公共基础',   bank:2423, target:970,  pct:'40%'},
+  {name:'其他客观题', bank:5180, target:1295, pct:'25%'}
+];
+
+/* ==================== 计划数据 ==================== */
+const PLAN_DATA = {
+  "2026-11-07": {
+    fixed: ["上午就医；任务从下午与晚上启动"],
+    paper: [
+      {t:"框架维度含义逐条清单（标出待写与待导师确认处）", n:"框架维度阐释"},
+      {t:"第二轮德尔菲问卷初稿：Likert题型、维度对应、填写说明、发放对象", n:"二轮德尔菲问卷"}
+    ],
+    fdy: [{s:"高等教育学", q:30}],
+    syb: [{s:"公共基础", q:15}, {s:"其他客观题", q:25, d:"常识10+判断15"}]
+  },
+  "2026-11-08": {
+    fixed: [],
+    paper: [
+      {t:"维度阐释定稿：逐条写清含义、依据、边界", n:"框架维度阐释"},
+      {t:"问卷内部试填，检查歧义/遗漏/跳转；核对名单、文案、附件", n:"二轮德尔菲问卷"},
+      {t:"问卷最终定稿，设置11月9日早定时发送", n:"二轮德尔菲问卷"}
+    ],
+    fdy: [{s:"高等教育学", q:100}],
+    syb: [{s:"公共基础", q:58}, {s:"其他客观题", q:75, d:"常识15+资料20+言语20+判断20"}]
+  },
+  "2026-11-09": {
+    fixed: ["8:30前下发第二轮德尔菲问卷（硬节点）", "可能组会"],
+    paper: [
+      {t:"下发第二轮德尔菲问卷", n:"二轮德尔菲问卷"},
+      {t:"组会：汇报框架定稿、维度阐释、问卷下发情况", n:"框架维度阐释"},
+      {t:"按组会反馈微调框架表述", n:"框架维度阐释"}
+    ],
+    fdy: [{s:"高等教育学", q:40}],
+    syb: [{s:"公共基础", q:15}, {s:"其他客观题", q:25, d:"常识10+言语15"}]
+  },
+  "2026-11-10": {
+    fixed: ["上班日：论文与复习严格控量"],
+    paper: [{t:"复盘问卷回收情况", n:"二轮德尔菲问卷"}],
+    fdy: [{s:"高等教育学", q:30}],
+    syb: [{s:"公共基础", q:15}, {s:"其他客观题", q:25, d:"常识10+资料15"}]
+  },
+  "2026-11-11": {
+    fixed: ["休假"],
+    paper: [{t:"框架理论基础书写初稿：理论依据、维度划分合理性论证", n:"框架理论基础书写"}],
+    fdy: [{s:"高等教育学", q:80}, {s:"大学心理学", q:30}],
+    syb: [{s:"公共基础", q:58}, {s:"其他客观题", q:75, d:"常识15+资料20+判断20+言语15+数量5"}]
+  },
+  "2026-11-12": {
+    fixed: ["休假"],
+    paper: [{t:"框架维度阐释1—2个子节初稿", n:"框架维度阐释"}],
+    fdy: [{s:"高等教育学", q:76}, {s:"大学心理学", q:34}],
+    syb: [{s:"公共基础", q:58}, {s:"其他客观题", q:75, d:"常识15+言语20+资料20+判断20"}]
+  },
+  "2026-11-13": {
+    fixed: ["上午去公司取文件（工作日窗口优先）"],
+    paper: [{t:"整理取回文件，论文轻量推进", n:"框架维度阐释"}],
+    fdy: [{s:"大学心理学", q:40}],
+    syb: [{s:"公共基础", q:15}, {s:"其他客观题", q:25, d:"常识10+判断15"}]
+  },
+  "2026-11-14": {
+    fixed: ["休假"],
+    paper: [{t:"框架理论基础+维度阐释整块书写，形成章节草稿（含结构图）", n:"框架理论基础书写"}],
+    fdy: [{s:"大学心理学", q:57}, {s:"高等教育心理学", q:63}],
+    syb: [{s:"公共基础", q:58}, {s:"其他客观题", q:75, d:"常识15+资料20+判断20+数量5+言语15"}]
+  },
+  "2026-11-15": {
+    fixed: ["休假"],
+    paper: [{t:"组会成果整理：框架构建初稿汇报版+问卷回收进展", n:"框架维度阐释"}],
+    fdy: [{s:"高等教育心理学", q:110}],
+    syb: [{s:"公共基础", q:58}, {s:"其他客观题", q:75, d:"常识15+言语20+资料20+判断20"}]
+  },
+  "2026-11-16": {
+    fixed: ["可能组会"],
+    paper: [
+      {t:"组会：汇报框架构建初稿与问卷回收情况", n:"框架维度阐释"},
+      {t:"按反馈修改框架构建部分", n:"框架维度阐释"}
+    ],
+    fdy: [{s:"高等教育心理学", q:40}],
+    syb: [{s:"公共基础", q:15}, {s:"其他客观题", q:25, d:"常识10+资料15"}]
+  },
+  "2026-11-17": {
+    fixed: ["休假（完整学习日）"],
+    paper: [
+      {t:"框架构建部分完整初稿：框架图、维度阐释、构建依据", n:"框架维度阐释"},
+      {t:"测评卷开发启动：维度对应、题型结构、评分方式、开发清单", n:"测评卷开发"}
+    ],
+    fdy: [{s:"高等教育心理学", q:120}],
+    syb: [{s:"公共基础", q:58}, {s:"其他客观题", q:75, d:"常识15+资料20+判断20+数量5+言语15"}]
+  },
+  "2026-11-18": {
+    fixed: ["休假"],
+    paper: [{t:"测评卷核心维度题目初稿编写", n:"测评卷开发"}],
+    fdy: [{s:"高等教育心理学", q:67}, {s:"高等教育法规", q:53}],
+    syb: [{s:"公共基础", q:58}, {s:"其他客观题", q:75, d:"常识15+言语20+资料20+判断20"}]
+  },
+  "2026-11-19": {
+    fixed: ["休假"],
+    paper: [
+      {t:"框架构建部分打磨：逻辑衔接与表述规范", n:"框架维度阐释"},
+      {t:"测评卷初稿补充", n:"测评卷开发"}
+    ],
+    fdy: [{s:"高等教育法规", q:110}],
+    syb: [{s:"公共基础", q:58}, {s:"其他客观题", q:75, d:"常识15+判断20+资料20+数量5+言语15"}]
+  },
+  "2026-11-20": {
+    fixed: ["休假"],
+    paper: [{t:"德尔菲问卷处理准备：编码分析框架、方法部分先写", n:"德尔菲问卷处理"}],
+    fdy: [{s:"高等教育法规", q:110}],
+    syb: [{s:"公共基础", q:58}, {s:"其他客观题", q:75, d:"常识15+资料20+言语20+判断20"}]
+  },
+  "2026-11-21": {
+    fixed: ["休假"],
+    paper: [
+      {t:"测评卷题目审核", n:"测评卷开发"},
+      {t:"问卷回收整理与催收", n:"德尔菲问卷处理"}
+    ],
+    fdy: [{s:"高等教育法规", q:77}, {s:"高校教师职业道德", q:43}],
+    syb: [{s:"公共基础", q:58}, {s:"其他客观题", q:75, d:"常识15+资料20+判断20+数量5+言语15"}]
+  },
+  "2026-11-22": {
+    fixed: ["休假"],
+    paper: [{t:"组会成果整理：框架定稿版+测评卷进度+回收汇总", n:"框架维度阐释"}],
+    fdy: [{s:"高校教师职业道德", q:100}],
+    syb: [{s:"公共基础", q:58}, {s:"其他客观题", q:75, d:"常识15+言语20+资料20+判断20"}]
+  },
+  "2026-11-23": {
+    fixed: ["可能组会"],
+    paper: [
+      {t:"组会：汇报框架构建定稿、测评卷进度、德尔菲回收情况", n:"框架维度阐释"},
+      {t:"按反馈修改", n:"框架维度阐释"}
+    ],
+    fdy: [{s:"高校教师职业道德", q:40}],
+    syb: [{s:"公共基础", q:15}, {s:"其他客观题", q:25, d:"常识10+判断15"}]
+  },
+  "2026-11-24": {
+    fixed: ["上班日"],
+    paper: [{t:"德尔菲问卷处理：录入/清洗已回收问卷", n:"德尔菲问卷处理"}],
+    fdy: [{s:"高校教师职业道德", q:30}],
+    syb: [{s:"公共基础", q:15}, {s:"其他客观题", q:25, d:"常识10+资料15"}]
+  },
+  "2026-11-25": {
+    fixed: ["上班日"],
+    paper: [{t:"德尔菲数据计算：条目均值、变异系数等", n:"德尔菲问卷数据计算"}],
+    fdy: [{s:"高校教师职业道德", q:30}],
+    syb: [{s:"公共基础", q:15}, {s:"其他客观题", q:25, d:"常识10+判断15"}]
+  },
+  "2026-11-26": {
+    fixed: ["上班日"],
+    paper: [{t:"数据计算收尾，形成可写入论文的结果表格/描述", n:"德尔菲问卷数据计算"}],
+    fdy: [{s:"高校教师职业道德", q:7}, {s:"辅导员知识", q:23}],
+    syb: [{s:"公共基础", q:15}, {s:"其他客观题", q:25, d:"常识10+言语15"}]
+  },
+  "2026-11-27": {
+    fixed: ["弹性日"],
+    paper: [
+      {t:"德尔菲法论文段落书写，结果写入论文并衔接框架构建部分", n:"德尔菲法论文段落书写"},
+      {t:"测评卷开发收尾：题目审核与格式整理", n:"测评卷开发"}
+    ],
+    fdy: [{s:"辅导员知识", q:120}],
+    syb: [{s:"公共基础", q:58}, {s:"其他客观题", q:75, d:"常识15+资料20+判断20+数量5+言语15"}]
+  },
+  "2026-11-28": {
+    fixed: ["冲刺日"],
+    paper: [{t:"论文三条线查漏补缺，对照清单逐项打勾", n:"德尔菲法论文段落书写"}],
+    fdy: [{s:"辅导员知识", q:120}, {s:"党建知识", q:37}],
+    syb: [{s:"公共基础", q:58}, {s:"其他客观题", q:75, d:"常识15+言语20+资料20+判断20"}]
+  },
+  "2026-11-29": {
+    fixed: ["组会成果整理"],
+    paper: [{t:"最终成果汇合：框架定稿+德尔菲结果+测评卷成品", n:"测评卷开发"}],
+    fdy: [{s:"辅导员知识", q:37}, {s:"党建知识", q:83}],
+    syb: [{s:"公共基础", q:66}, {s:"其他客观题", q:70, d:"常识15+资料20+言语15+判断20"}]
+  },
+  "2026-11-30": {
+    fixed: ["可能组会"],
+    paper: [{t:"组会汇报；列出12月第一周修改清单", n:"框架维度阐释"}],
+    fdy: [{s:"党建知识", q:30}],
+    syb: [{s:"公共基础", q:15}, {s:"其他客观题", q:25, d:"常识10+资料15"}]
+  }
+};
+
+/* ==================== 工具 ==================== */
+function dk(d){ return `${YEAR}-${String(MONTH+1).padStart(2,'0')}-${String(d).padStart(2,'0')}`; }
+function pad(n){ return String(n).padStart(2,'0'); }
+function esc(s){
+  return String(s).replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+}
+function pct(a,b){ return b > 0 ? Math.round(a/b*100) : 0; }
+
+/* ==================== 状态 ==================== */
+function buildInitial(){
+  const days = {};
+  const totalDays = new Date(YEAR, MONTH+1, 0).getDate();
+  for (let d = 1; d <= totalDays; d++) days[dk(d)] = [];
+
+  Object.keys(PLAN_DATA).forEach(date => {
+    const p = PLAN_DATA[date];
+    const arr = [];
+    (p.fixed||[]).forEach((t,i) => {
+      arr.push({id:`${date}|fixed|${i}`, type:'fixed', text:t, done:false});
+    });
+    (p.paper||[]).forEach((t,i) => {
+      arr.push({id:`${date}|paper|${i}`, type:'paper', text:t.t, node:t.n, done:false});
+    });
+    (p.fdy||[]).forEach((t,i) => {
+      arr.push({id:`${date}|fdy|${i}`, type:'fdy', sub:t.s, q:t.q, done:false});
+    });
+    (p.syb||[]).forEach((t,i) => {
+      arr.push({id:`${date}|syb|${i}`, type:'syb', sub:t.s, q:t.q, detail:t.d||'', done:false});
+    });
+    days[date] = arr;
+  });
+  return days;
+}
+
+let state;
+function loadState(){
+  try{
+    const raw = localStorage.getItem(STORE_KEY);
+    if (raw){
+      const o = JSON.parse(raw);
+      if (o && o.days){
+        const init = buildInitial();
+        Object.keys(init).forEach(k => {
+          if (!Array.isArray(o.days[k])) o.days[k] = init[k];
+        });
+        return { days: o.days, selected: o.selected || '2026-11-07' };
+      }
+    }
+  }catch(e){}
+  return { days: buildInitial(), selected: '2026-11-07' };
+}
+function save(){
+  try{ localStorage.setItem(STORE_KEY, JSON.stringify(state)); }catch(e){}
+}
+state = loadState();
+
+/* ==================== 渲染日历 ==================== */
+const calEl = document.getElementById('cal');
+
+function renderCalendar(){
+  const firstDow = new Date(YEAR, MONTH, 1).getDay();
+  const startOffset = (firstDow + 6) % 7;
+  const totalDays = new Date(YEAR, MONTH+1, 0).getDate();
+
+  const today = new Date();
+  const todayK = (today.getFullYear()===YEAR && today.getMonth()===MONTH) ? dk(today.getDate()) : null;
+
+  let html = ['一','二','三','四','五','六','日']
+    .map(d => `<div class="dow">${d}</div>`).join('');
+
+  for (let i = 0; i < startOffset; i++) html += `<div class="day blank"></div>`;
+
+  for (let d = 1; d <= totalDays; d++){
+    const key = dk(d);
+    const list = state.days[key] || [];
+    const done = list.filter(t => t.done).length;
+    const total = list.length;
+    const p = total ? pct(done, total) : 0;
+
+    const cls = ['day'];
+    if (total) cls.push('has');
+    if (total && done === total) cls.push('all');
+    if (key === state.selected) cls.push('sel');
+    if (key === todayK) cls.push('today');
+
+    html += `<div class="${cls.join(' ')}" data-k="${key}">
+      <span class="dnum">${d}</span>
+      <span class="dbar"><i style="width:${p}%"></i></span>
+    </div>`;
+  }
+
+  calEl.innerHTML = html;
+
+  let allDone = 0, allTotal = 0, fdyQ = 0, sybQ = 0;
+  Object.values(state.days).forEach(list => {
+    list.forEach(t => {
+      allTotal++;
+      if (t.done) allDone++;
+      if (t.done && t.type === 'fdy') fdyQ += (t.q||0);
+      if (t.done && t.type === 'syb') sybQ += (t.q||0);
+    });
+  });
+  document.getElementById('calMeta').textContent = `${allDone}/${allTotal} 项`;
+  document.getElementById('calDone').textContent = `${allDone} / ${allTotal}`;
+  document.getElementById('calBar').style.width = pct(allDone, allTotal) + '%';
+  document.getElementById('calFdy').textContent = fdyQ + ' 题';
+  document.getElementById('calSyb').textContent = sybQ + ' 题';
+}
+
+/* ==================== 渲染当日 ==================== */
+const dayBody = document.getElementById('dayBody');
+const dayTitle = document.getElementById('dayTitle');
+const dayMeta = document.getElementById('dayMeta');
+
+const GROUP_META = {
+  fixed: {label:'固定事项', tag:'fixed'},
+  paper: {label:'论文', tag:'paper'},
+  fdy:   {label:'辅导员备考', tag:'fdy'},
+  syb:   {label:'事业编备考', tag:'syb'}
+};
+
+function renderDay(){
+  const key = state.selected;
+  const [y,m,d] = key.split('-').map(Number);
+  const dt = new Date(y, m-1, d);
+  const w = '日一二三四五六'[dt.getDay()];
+
+  dayTitle.textContent = `${m}月${d}日 · 周${w}`;
+
+  const list = state.days[key] || [];
+  const done = list.filter(t => t.done).length;
+  dayMeta.textContent = `${done}/${list.length}`;
+
+  if (!list.length){
+    dayBody.innerHTML = `<div class="empty">这一天没有安排。可在日历中选择其他日期。</div>`;
+    return;
+  }
+
+  const types = ['fixed','paper','fdy','syb'];
+  let html = '';
+
+  types.forEach(type => {
+    const items = list.filter(t => t.type === type);
+    if (!items.length) return;
+    const g = GROUP_META[type];
+    const gDone = items.filter(t => t.done).length;
+
+    let sum = `${gDone}/${items.length}`;
+    if (type === 'fdy' || type === 'syb'){
+      const q = items.reduce((a,b) => a + (b.q||0), 0);
+      sum = `${q} 题 · ${sum}`;
+    }
+
+    html += `<div class="group">
+      <div class="group-head">
+        <span class="gtag" data-t="${g.tag}">${g.label}</span>
+        <span class="gsum">${sum}</span>
+      </div>
+      <ul class="tasks">`;
+
+    items.forEach(t => {
+      if (type === 'fdy' || type === 'syb'){
+        const dd = t.detail ? `<span class="sybd">（${esc(t.detail)}）</span>` : '';
+        html += `<li class="task ${t.done?'done':''}" data-id="${t.id}" data-t="${type}">
+          <label class="cb">
+            <input type="checkbox" ${t.done?'checked':''}>
+            <span class="box"></span>
+          </label>
+          <span class="txt"><span class="sub-label">${esc(t.sub)}</span>刷题${dd}</span>
+          <span class="qty" title="双击修改题量">${t.q} 题</span>
+          <button class="del" title="删除">×</button>
+        </li>`;
+      } else {
+        html += `<li class="task ${t.done?'done':''}" data-id="${t.id}" data-t="${type}">
+          <label class="cb">
+            <input type="checkbox" ${t.done?'checked':''}>
+            <span class="box"></span>
+          </label>
+          <span class="txt" data-editable="1">${esc(t.text)}</span>
+          <button class="del" title="删除">×</button>
+        </li>`;
+      }
+    });
+
+    html += `</ul></div>`;
+  });
+
+  dayBody.innerHTML = html;
+}
+
+/* ==================== 渲染总目标 ==================== */
+function computeProgress(){
+  const paper = {};
+  NODES.forEach(n => paper[n] = {done:0, total:0});
+
+  const fdy = {};
+  FDY_SUBS.forEach(s => fdy[s.name] = {done:0, total:0});
+
+  const syb = {};
+  SYB_SUBS.forEach(s => syb[s.name] = {done:0, total:0});
+
+  Object.values(state.days).forEach(list => {
+    list.forEach(t => {
+      if (t.type === 'paper' && paper[t.node]){
+        paper[t.node].total++;
+        if (t.done) paper[t.node].done++;
+      }
+      if (t.type === 'fdy' && fdy[t.sub]){
+        fdy[t.sub].total += (t.q||0);
+        if (t.done) fdy[t.sub].done += (t.q||0);
+      }
+      if (t.type === 'syb' && syb[t.sub]){
+        syb[t.sub].total += (t.q||0);
+        if (t.done) syb[t.sub].done += (t.q||0);
+      }
+    });
+  });
+
+  return {paper, fdy, syb};
+}
+
+function renderGoals(){
+  const {paper, fdy, syb} = computeProgress();
+
+  let pDone = 0, pTotal = 0;
+  let pHtml = '';
+  NODES.forEach(n => {
+    const o = paper[n];
+    pDone += o.done; pTotal += o.total;
+    const p = pct(o.done, o.total);
+    pHtml += `<div class="gs-item">
+      <div class="gs-line">
+        <span class="nm">${n}</span>
+        <span class="vl"><b>${o.done}</b>/${o.total} 项</span>
+      </div>
+      <div class="gs-bar"><i style="width:${p}%"></i></div>
+    </div>`;
+  });
+  document.getElementById('paperItems').innerHTML = pHtml;
+  document.getElementById('paperCount').textContent = `${pDone}/${pTotal}`;
+  document.getElementById('paperPct').textContent = pct(pDone, pTotal) + '%';
+
+  let fDone = 0, fTotal = 0;
+  let fHtml = '';
+  FDY_SUBS.forEach(s => {
+    const o = fdy[s.name];
+    fDone += o.done; fTotal += o.total;
+    const p = pct(o.done, o.total);
+    fHtml += `<div class="gs-item">
+      <div class="gs-line">
+        <span class="nm">${s.name}</span>
+        <span class="vl"><b>${o.done}</b>/${o.total} 题</span>
+      </div>
+      <div class="gs-bar"><i style="width:${p}%"></i></div>
+      <div class="gs-note">题库 ${s.bank} 题 · 本月计划 ${s.target} 题</div>
+    </div>`;
+  });
+  document.getElementById('fdyItems').innerHTML = fHtml;
+  document.getElementById('fdyCount').textContent = `${fDone}/${fTotal}`;
+  document.getElementById('fdyPct').textContent = pct(fDone, fTotal) + '%';
+
+  let sDone = 0, sTotal = 0;
+  let sHtml = '';
+  SYB_SUBS.forEach(s => {
+    const o = syb[s.name];
+    sDone += o.done; sTotal += o.total;
+    const p = pct(o.done, o.total);
+    sHtml += `<div class="gs-item">
+      <div class="gs-line">
+        <span class="nm">${s.name}</span>
+        <span class="vl"><b>${o.done}</b>/${o.total} 题</span>
+      </div>
+      <div class="gs-bar"><i style="width:${p}%"></i></div>
+      <div class="gs-note">题库 ${s.bank} 题 · 本月计划 ${s.pct}（${s.target} 题）</div>
+    </div>`;
+  });
+  document.getElementById('sybItems').innerHTML = sHtml;
+  document.getElementById('sybCount').textContent = `${sDone}/${sTotal}`;
+  document.getElementById('sybPct').textContent = pct(sDone, sTotal) + '%';
+
+  const pp = pct(pDone, pTotal);
+  const fp = pct(fDone, fTotal);
+  const sp = pct(sDone, sTotal);
+  document.getElementById('topPaper').textContent = pp + '%';
+  document.getElementById('topPaperBar').style.width = pp + '%';
+  document.getElementById('topFdy').textContent = fp + '%';
+  document.getElementById('topFdyBar').style.width = fp + '%';
+  document.getElementById('topSyb').textContent = sp + '%';
+  document.getElementById('topSybBar').style.width = sp + '%';
+
+  document.getElementById('goalMeta').textContent =
+    `论文 ${pp}% · 辅导员 ${fp}% · 事业编 ${sp}%`;
+}
+
+/* ==================== 交互 ==================== */
+calEl.addEventListener('click', e => {
+  const el = e.target.closest('.day[data-k]');
+  if (!el) return;
+  state.selected = el.dataset.k;
+  save();
+  renderAll();
+});
+
+function shiftDay(step){
+  const [y,m,d] = state.selected.split('-').map(Number);
+  const dt = new Date(y, m-1, d + step);
+  if (dt.getMonth() !== MONTH) return;
+  state.selected = `${dt.getFullYear()}-${pad(dt.getMonth()+1)}-${pad(dt.getDate())}`;
+  save();
+  renderAll();
+}
+document.getElementById('prevDay').addEventListener('click', () => shiftDay(-1));
+document.getElementById('nextDay').addEventListener('click', () => shiftDay(1));
+
+/* 勾选 */
+dayBody.addEventListener('change', e => {
+  if (!e.target.matches('input[type="checkbox"]')) return;
+  const li = e.target.closest('.task');
+  const task = findTask(li.dataset.id);
+  if (!task) return;
+  task.done = e.target.checked;
+  save();
+  renderAll();
+});
+
+/* 删除 */
+dayBody.addEventListener('click', e => {
+  const btn = e.target.closest('.del');
+  if (!btn) return;
+  const li = btn.closest('.task');
+  const list = state.days[state.selected] || [];
+  const idx = list.findIndex(t => t.id === li.dataset.id);
+  if (idx === -1) return;
+  if (!confirm('确定删除这条任务？')) return;
+  list.splice(idx, 1);
+  save();
+  renderAll();
+});
+
+/* 双击编辑：题量 / 文字 */
+dayBody.addEventListener('dblclick', e => {
+  /* 1. 题量 */
+  const qty = e.target.closest('.qty');
+  if (qty){
+    const li = qty.closest('.task');
+    const task = findTask(li.dataset.id);
+    if (!task) return;
+    startQtyEdit(qty, task);
+    return;
+  }
+
+  /* 2. 任务文字 */
+  const span = e.target.closest('.txt[data-editable]');
+  if (!span) return;
+  const li = span.closest('.task');
+  const task = findTask(li.dataset.id);
+  if (!task) return;
+  startTextEdit(span, task);
+});
+
+function withScrollPreserve(fn){
+  const pos = dayBody.scrollTop;
+  fn();
+  renderAll();
+  dayBody.scrollTop = pos;
+}
+
+function startQtyEdit(el, task){
+  const input = document.createElement('input');
+  input.type = 'number';
+  input.className = 'qty-input';
+  input.min = '0';
+  input.value = task.q;
+  el.replaceWith(input);
+  input.focus();
+  input.select();
+
+  let finished = false;
+  const commit = () => {
+    if (finished) return;
+    finished = true;
+    const v = parseInt(input.value, 10);
+    task.q = (isNaN(v) || v < 0) ? 0 : v;
+    save();
+    withScrollPreserve(() => {});
+  };
+  input.addEventListener('blur', commit);
+  input.addEventListener('keydown', ev => {
+    if (ev.key === 'Enter'){ ev.preventDefault(); input.blur(); }
+    if (ev.key === 'Escape'){
+      finished = true;
+      withScrollPreserve(() => {});
+    }
+  });
+}
+
+function startTextEdit(span, task){
+  const input = document.createElement('input');
+  input.type = 'text';
+  input.className = 'edit-input';
+  input.value = task.text;
+  span.replaceWith(input);
+  input.focus();
+  input.select();
+
+  let finished = false;
+  const commit = () => {
+    if (finished) return;
+    finished = true;
+    const v = input.value.trim();
+    if (v) task.text = v;
+    save();
+    withScrollPreserve(() => {});
+  };
+  input.addEventListener('blur', commit);
+  input.addEventListener('keydown', ev => {
+    if (ev.key === 'Enter'){ ev.preventDefault(); input.blur(); }
+    if (ev.key === 'Escape'){
+      finished = true;
+      withScrollPreserve(() => {});
+    }
+  });
+}
+
+function findTask(id){
+  for (const list of Object.values(state.days)){
+    const t = list.find(x => x.id === id);
+    if (t) return t;
+  }
+  return null;
+}
+
+/* 当日全部完成 / 取消 */
+document.getElementById('doneTodayBtn').addEventListener('click', () => {
+  const list = state.days[state.selected] || [];
+  if (!list.length) return;
+  const allDone = list.every(t => t.done);
+  list.forEach(t => t.done = !allDone);
+  save();
+  renderAll();
+});
+
+/* 重置 */
+document.getElementById('resetBtn').addEventListener('click', () => {
+  if (!confirm('将清空本月全部打卡记录并恢复初始计划，确定吗？')) return;
+  state.days = buildInitial();
+  state.selected = '2026-11-07';
+  save();
+  renderAll();
+});
+
+/* ==================== 总渲染 ==================== */
+function renderAll(){
+  renderCalendar();
+  renderDay();
+  renderGoals();
+}
+
+renderAll();
+</script>
+</body>
+</html>
